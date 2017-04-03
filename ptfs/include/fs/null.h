@@ -19,11 +19,13 @@ namespace ptfs {
 		public:
 
 			NullFileSystem()
-				:FileSystem() {}
+				:FileSystem() {
+				strcpy(FsName, "raw");
+				Type = PARTITION_FAT16;
+			}
 			NullFileSystem(device::PartitionDevice* Device)
 				:FileSystem(Device) {
-				strcpy(FsName, "null");
-				Type = PARTITION_EMPTY;
+				NullFileSystem();
 			}
 
 			bool MakeFs() { return true; }

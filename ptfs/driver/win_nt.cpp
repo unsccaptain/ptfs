@@ -92,11 +92,32 @@ namespace ptfs {
 
 		}
 
-		void GetDeviceGeometry(uint8_t* c, uint8_t* h, uint8_t* s) {
+		void GetDeviceGeometry(device_t Device,uint16_t* c, uint8_t* h, uint8_t* s) {
 
-			*c = 63;
-			*h = 255;
-			*s = 63;
+			sec_off_t size;
+
+			PDISK_GEOMETRY_EX gex = (PDISK_GEOMETRY_EX)malloc(4096);
+			DWORD ret;
+			BOOL bResult = DeviceIoControl(Device,     // device to be queried
+				IOCTL_DISK_GET_DRIVE_GEOMETRY_EX,     // operation to perform
+				NULL, 0,
+				gex, 4096,     // output buffer
+				&ret,                 // # bytes returned
+				(LPOVERLAPPED)NULL);  // synchronous I/O
+
+			if (!bResult) {
+				*c = 0;
+				*h = 0;
+				*s = 0;
+			}
+			else {
+				*c = gex->Geometry.Cylinders.QuadPart;
+				*h = gex->Geometry.TracksPerCylinder;
+				*s = gex->Geometry.SectorsPerTrack;
+			}
+
+			free(gex);
+			return;
 
 		}
 

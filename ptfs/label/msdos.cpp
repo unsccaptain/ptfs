@@ -133,6 +133,7 @@ namespace ptfs {
 						real_start = ALIGN_UP_BY(Start, sec_align);
 						usable_size = boundary_down - boundary_up;
 						part_number = i + 2;
+						break;
 
 					}
 
@@ -192,9 +193,22 @@ namespace ptfs {
 			Partitions.push_back(Part);
 
 			DosRawPartition* PtEntry = &Mbr.partitions[part_number - 1];
+
 			PtEntry->BootIndicator = 0;
-			PtEntry->CHS_END = { 0 ,0,0 };
-			PtEntry->CHS_Start = { 0 ,0,0 };
+
+			/* 计算起始和结束CHS,其实没多少必要 */
+			uint16_t c = real_start / (255 * 63) ;
+			uint8_t rc = c & 0xFF;
+			uint8_t h = (real_start / 63) % 255 +0;
+			uint8_t s = ((real_start % 63) + 0) | ((c >> 8) << 6) + 1;
+			PtEntry->CHS_Start = { h ,s ,rc };
+
+			c = (real_start + real_size) / (255 * 63);
+			rc = c & 0xFF;
+			h = ((real_start + real_size) / 63) % 255;
+			s = ((real_start % 63) + 0) | ((c >> 8) << 6) + 1;
+			PtEntry->CHS_END = { h ,s,rc };
+
 			PtEntry->Length = real_size;
 			PtEntry->Start = real_start;
 			PtEntry->Type = Fs->GetType();
@@ -208,6 +222,12 @@ namespace ptfs {
 			if (Dev->WriteDeviceSector(0, (uint8_t*)&Mbr, 1) != 1) {
 				Status = ERR_INVALID_DEV;
 				return;
+			}
+
+			for (int i = 0;i < Partitions.size();i++) {
+
+				Partitions[i].Fs->Sync();
+
 			}
 
 		}

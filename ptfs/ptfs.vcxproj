@@ -116,6 +116,7 @@
     <ClCompile Include="fs\null.cpp" />
     <ClCompile Include="include\device.cpp" />
     <ClCompile Include="include\err.h" />
+    <ClCompile Include="label\gpt.cpp" />
     <ClCompile Include="label\msdos.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -127,6 +128,7 @@
     <ClInclude Include="include\fs\filesystem.h" />
     <ClInclude Include="include\fs\null.h" />
     <ClInclude Include="include\io_if.h" />
+    <ClInclude Include="include\label\gpt.h" />
     <ClInclude Include="include\label\label.h" />
     <ClInclude Include="include\label\msdos.h" />
     <ClInclude Include="include\partition.h" />

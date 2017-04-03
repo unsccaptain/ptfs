@@ -54,6 +54,9 @@
     <ClCompile Include="fs\null.cpp">
       <Filter>源文件\fs</Filter>
     </ClCompile>
+    <ClCompile Include="label\gpt.cpp">
+      <Filter>源文件\label</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\config.h">
@@ -88,6 +91,9 @@
     </ClInclude>
     <ClInclude Include="include\fs\null.h">
       <Filter>源文件\include\fs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\label\gpt.h">
+      <Filter>源文件\include\label</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

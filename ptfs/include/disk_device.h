@@ -60,6 +60,12 @@ namespace ptfs {
 
 			}
 
+			void GetGeometry(uint16_t* c, uint8_t* h, uint8_t* s) {
+
+				GetDeviceGeometry(Handle, c, h, s);
+
+			}
+
 		};
 
 	}

@@ -55,6 +55,41 @@ namespace ptfs {
 
 	namespace label {
 
+		typedef struct _DosRawPartition		DosRawPartition;
+		typedef struct _DosRawTable			DosRawTable;
+
+		/* note: lots of bit-bashing here, thus, you shouldn't look inside it.
+		* Use chs_to_sector() and sector_to_chs() instead.
+		*/
+
+#pragma pack(push,1)
+
+		typedef struct {
+			uint8_t		Head;
+			uint8_t		Sector;
+			uint8_t		Cylinder;
+		} RawCHS;
+
+		/* ripped from Linux source */
+		struct _DosRawPartition {
+			uint8_t		BootIndicator;		/* 00:  0x80 - active */
+			RawCHS		CHS_Start;			/* 01: */
+			uint8_t		Type;				/* 04: partition type */
+			RawCHS		CHS_END;			/* 05: */
+			uint32_t	Start;				/* 08: starting sector counting from 0 */
+			uint32_t	Length;				/* 0c: nr of sectors in partition */
+		};
+
+		struct _DosRawTable {
+			char			boot_code[440];
+			uint32_t		mbr_signature;	/* really a unique ID */
+			uint16_t		Unknown;
+			DosRawPartition	partitions[DOS_N_PRI_PARTITIONS];
+			uint16_t		magic;
+		};
+
+#pragma pack(pop,1)
+
 		class Label :public Base {
 
 		protected:
