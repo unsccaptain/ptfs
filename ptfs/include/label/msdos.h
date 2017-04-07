@@ -94,6 +94,12 @@ namespace ptfs{
 
 			void Sync();
 
+			void ReleaseObject() {
+
+				Dev->DEC_REF();
+
+			}
+
 		};
 
 	}

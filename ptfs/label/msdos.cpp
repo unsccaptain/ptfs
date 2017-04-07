@@ -183,10 +183,6 @@ namespace ptfs {
 				device::PartitionDevice* PartDev = new device::PartitionDevice(Dev, real_start, real_size);
 				Fs->SetPartitionDevice(PartDev);
 
-				if (!Fs->MakeFs()) {
-					return false;
-				}
-
 			}
 
 			Partition Part(real_start, real_size, Fs, part_number);

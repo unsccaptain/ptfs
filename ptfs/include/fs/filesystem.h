@@ -34,7 +34,7 @@ namespace ptfs {
 
 			uint8_t	GetType() { return Type; }
 
-			virtual bool MakeFs() = 0;
+			virtual bool MakeFs(uint32_t Type, uint32_t ClusterSize) = 0;
 
 			virtual bool Sync() = 0;
 

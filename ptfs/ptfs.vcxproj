@@ -112,6 +112,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="driver\win_nt.cpp" />
+    <ClCompile Include="fs\fat.cpp" />
     <ClCompile Include="fs\filesystem.cpp" />
     <ClCompile Include="fs\null.cpp" />
     <ClCompile Include="include\device.cpp" />
@@ -125,6 +126,7 @@
     <ClInclude Include="include\config.h" />
     <ClInclude Include="include\device.h" />
     <ClInclude Include="include\disk_device.h" />
+    <ClInclude Include="include\fs\fat.h" />
     <ClInclude Include="include\fs\filesystem.h" />
     <ClInclude Include="include\fs\null.h" />
     <ClInclude Include="include\io_if.h" />

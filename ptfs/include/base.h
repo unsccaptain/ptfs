@@ -12,6 +12,11 @@ typedef UINT16		uint16_t;
 typedef UINT32		uint32_t;
 typedef UINT64		uint64_t;
 
+typedef INT8		int8_t;
+typedef INT16		int16_t;
+typedef INT32		int32_t;
+typedef INT64		int64_t;
+
 typedef UINT32		err_t;
 
 typedef UINT64		sec_off_t;
@@ -56,9 +61,19 @@ namespace ptfs {
 
 		err_t Status;
 
+		uint32_t Refs;
+
 	public:
 
 		err_t GetStatus() { return Status; }
+
+		void INC_REF() { Refs++; }
+
+		void DEC_REF() { Refs--; }
+
+		bool NoMoreRef() { return Refs == 0; }
+
+		void ReleaseObject() {};
 
 	};
 

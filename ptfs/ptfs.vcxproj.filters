@@ -57,6 +57,9 @@
     <ClCompile Include="label\gpt.cpp">
       <Filter>源文件\label</Filter>
     </ClCompile>
+    <ClCompile Include="fs\fat.cpp">
+      <Filter>源文件\fs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\config.h">
@@ -94,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="include\label\gpt.h">
       <Filter>源文件\include\label</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fs\fat.h">
+      <Filter>源文件\include\fs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
