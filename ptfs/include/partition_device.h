@@ -96,6 +96,18 @@ namespace ptfs {
 
 			}
 
+			bool Lock() {
+
+				return false;
+
+			}
+
+			bool Unlock() {
+
+				return false;
+
+			}
+
 			sec_off_t GetAlignInSector() {
 
 				return 8;

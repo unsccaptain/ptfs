@@ -26,6 +26,14 @@ typedef HANDLE		device_t;
 
 #endif
 
+typedef struct _guid_s {
+	uint32_t	Data1;
+	uint16_t	Data2;
+	uint16_t	Data3;
+	uint8_t		Data4[8];
+} guid_s;
+
+typedef guid_s*	guid_t;
 
 /* µÿ÷∑∂‘∆Î∫Í */
 
@@ -54,6 +62,12 @@ typedef HANDLE		device_t;
     ALIGN_UP_POINTER_BY(address, sizeof(type))
 
 namespace ptfs {
+
+	int make_crc32_table();
+
+	uint32_t make_crc(uint32_t crc, unsigned char *string, uint32_t size);
+
+	void GenerateGuid(guid_t Guid);
 
 	class Base {
 

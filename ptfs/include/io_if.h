@@ -15,6 +15,10 @@ namespace ptfs {
 
 		sec_off_t	GetDeviceSize(device_t Device);
 
+		bool		LockDevice(device_t Device);
+
+		bool		UnlockDevice(device_t Device);
+
 		void		GetDeviceGeometry(device_t Device, uint16_t* c, uint8_t* h, uint8_t* s);
 
 	}

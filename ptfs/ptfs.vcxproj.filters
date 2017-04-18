@@ -60,6 +60,9 @@
     <ClCompile Include="fs\fat.cpp">
       <Filter>源文件\fs</Filter>
     </ClCompile>
+    <ClCompile Include="support.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\config.h">

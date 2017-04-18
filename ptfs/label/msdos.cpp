@@ -19,7 +19,7 @@ namespace ptfs {
 
 		Partition* Msdos::GetPartitionObj(uint8_t PartNumber) {
 
-			for (int i = 0;i < Partitions.size();i++) {
+			for (size_t i = 0;i < Partitions.size();i++) {
 				if (Partitions[i].PartNumber == PartNumber)
 					return &Partitions[i];
 			}
@@ -46,7 +46,7 @@ namespace ptfs {
 
 			memcpy(&this->Mbr, &Mbr, sizeof(Mbr));
 
-			for (int i = 0;i < Partitions.size();i++) {
+			for (size_t i = 0;i < Partitions.size();i++) {
 				delete Partitions[i].Fs;
 			}
 
@@ -124,7 +124,7 @@ namespace ptfs {
 				sec_off_t boundary_down;
 				sec_off_t boundary_up = 0;
 
-				for (int i = 0;i < Partitions.size();i++) {
+				for (size_t i = 0;i < Partitions.size();i++) {
 
 					boundary_down = ALIGN_DOWN_BY(Partitions[i].TotalSectors, sec_align);
 
@@ -182,6 +182,7 @@ namespace ptfs {
 			
 				device::PartitionDevice* PartDev = new device::PartitionDevice(Dev, real_start, real_size);
 				Fs->SetPartitionDevice(PartDev);
+				Fs->MakeFs(PARTITION_FAT32, 4096);
 
 			}
 
@@ -221,7 +222,7 @@ namespace ptfs {
 			}
 
 			for (int i = 0;i < Partitions.size();i++) {
-
+				
 				Partitions[i].Fs->Sync();
 
 			}

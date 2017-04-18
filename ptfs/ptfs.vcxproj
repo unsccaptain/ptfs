@@ -120,6 +120,7 @@
     <ClCompile Include="label\gpt.cpp" />
     <ClCompile Include="label\msdos.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="support.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\base.h" />

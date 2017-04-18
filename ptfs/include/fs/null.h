@@ -25,7 +25,8 @@ namespace ptfs {
 			}
 			NullFileSystem(device::PartitionDevice* Device)
 				:FileSystem(Device) {
-				NullFileSystem();
+				strcpy(FsName, "raw");
+				Type = PARTITION_FAT16;
 			}
 
 			bool MakeFs() { return true; }

@@ -37,6 +37,14 @@
 #define MAX_FAT16_CLUSTERS	65526
 #define MAX_FAT32_CLUSTERS	2000000
 
+#define READONLY_ATTR		0x01
+#define HIDDEN_ATTR		0x02
+#define SYSTEM_ATTR		0x04
+#define VOLUME_LABEL_ATTR	0x08
+#define VFAT_ATTR		0x0f
+#define DIRECTORY_ATTR		0x10
+#define ARCH_ATTR		0x20
+
 namespace ptfs {
 
 	namespace filesystem {
@@ -141,7 +149,6 @@ namespace ptfs {
 
 			FatBootSector*		BootSector;
 			FatInfoSector*		InfoSector;
-			FatType				Type;
 
 			sec_off_t			ValidSecSize;
 			sec_off_t			ValidClusterSize;
@@ -152,6 +159,10 @@ namespace ptfs {
 			uint32_t			TbEntryCount;
 
 		public:
+
+			Fat() {
+
+			}
 
 			Fat(device::PartitionDevice* Device)
 				:FileSystem(Device) {
@@ -236,8 +247,13 @@ namespace ptfs {
 
 			}
 
+			/* 生成分区 */
 			bool MakeFs(uint32_t Type, uint32_t ClusterSize);
 			
+			/* 写入硬盘 */
+			bool Sync();
+
+			/* 释放本对象 */
 			void ReleaseObject() {
 
 				if (!NoMoreRef()) {

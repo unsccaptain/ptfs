@@ -13,7 +13,7 @@ namespace ptfs {
 		device_t OpenDevice(char* PathName) {
 
 			return CreateFile(PathName,
-				GENERIC_READ | GENERIC_WRITE,
+				GENERIC_ALL,
 				FILE_SHARE_READ | FILE_SHARE_WRITE,
 				NULL,
 				OPEN_EXISTING,
@@ -51,6 +51,7 @@ namespace ptfs {
 
 			LONG High = 0;
 			SetFilePointer(Device, Offset << 9, &High, FILE_BEGIN);
+			//写入磁盘文件   
 
 			if (WriteFile(Device,
 				Buffer,
@@ -58,7 +59,7 @@ namespace ptfs {
 				(LPDWORD)&size,
 				NULL
 			)) {
-
+	
 				return size >> 9;
 
 			}
@@ -118,6 +119,22 @@ namespace ptfs {
 
 			free(gex);
 			return;
+
+		}
+
+		bool LockDevice(device_t Device) {
+
+			DWORD dwBytesReturned;
+			/* 尝试锁定但不管有没有成功 */
+			return DeviceIoControl(Device, FSCTL_LOCK_VOLUME, NULL, 0, NULL, 0, &dwBytesReturned, NULL);
+			
+		}
+
+		bool UnlockDevice(device_t Device) {
+
+			DWORD dwBytesReturned;
+			/* 尝试锁定但不管有没有成功 */
+			return DeviceIoControl(Device, FSCTL_UNLOCK_VOLUME, NULL, 0, NULL, 0, &dwBytesReturned, NULL);
 
 		}
 

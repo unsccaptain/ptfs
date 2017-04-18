@@ -45,6 +45,18 @@ namespace ptfs {
 
 			}
 
+			bool Lock() {
+
+				return LockDevice(Handle);
+
+			}
+
+			bool Unlock() {
+
+				return UnlockDevice(Handle);
+
+			}
+
 			sec_off_t GetSize() {
 
 				if (Size == 0)

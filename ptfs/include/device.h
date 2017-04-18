@@ -32,6 +32,8 @@ namespace ptfs {
 
 			virtual ssize_t		WriteDeviceSector(sec_off_t Offset, uint8_t* Buffer, sec_off_t Size) = 0;
 
+			//virtual sec_off_t	GetStart() = 0;
+
 			virtual sec_off_t	GetSize() = 0;
 
 			virtual	sec_off_t	GetAlignInSector() = 0;
