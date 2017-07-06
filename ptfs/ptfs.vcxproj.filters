@@ -31,6 +31,24 @@
     <Filter Include="源文件\include\fs">
       <UniqueIdentifier>{99528289-b4ec-43aa-a8e1-351dce1c4eb6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\include\file">
+      <UniqueIdentifier>{dcb6c853-6693-4283-917b-703494cee23d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\include\volume">
+      <UniqueIdentifier>{a3d8e8d6-169d-4ffb-be01-a32fe410647d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\volume">
+      <UniqueIdentifier>{141da913-8803-4490-9808-89cd5f8f6f59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\crypto">
+      <UniqueIdentifier>{4210c1f8-ab52-4a07-9dbf-0259abd07181}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\crypto\crc32">
+      <UniqueIdentifier>{fa0a073f-de36-4d95-a52a-22c9274ee778}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\include\crypto">
+      <UniqueIdentifier>{f7349b1d-c157-4f4f-b136-bc0eaf9c2dd2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -38,9 +56,6 @@
     </ClCompile>
     <ClCompile Include="label\msdos.cpp">
       <Filter>源文件\label</Filter>
-    </ClCompile>
-    <ClCompile Include="driver\win_nt.cpp">
-      <Filter>源文件\driver</Filter>
     </ClCompile>
     <ClCompile Include="include\device.cpp">
       <Filter>源文件</Filter>
@@ -63,6 +78,21 @@
     <ClCompile Include="support.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="volume\normal.cpp">
+      <Filter>源文件\volume</Filter>
+    </ClCompile>
+    <ClCompile Include="partition_device.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="driver\os-win32.cpp">
+      <Filter>源文件\driver</Filter>
+    </ClCompile>
+    <ClCompile Include="disk_device.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="crypto\crc32\crc32.cpp">
+      <Filter>源文件\crypto\crc32</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\config.h">
@@ -72,12 +102,6 @@
       <Filter>源文件\include</Filter>
     </ClInclude>
     <ClInclude Include="include\device.h">
-      <Filter>源文件\include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\io_if.h">
-      <Filter>源文件\include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\partition.h">
       <Filter>源文件\include</Filter>
     </ClInclude>
     <ClInclude Include="include\disk_device.h">
@@ -103,6 +127,24 @@
     </ClInclude>
     <ClInclude Include="include\fs\fat.h">
       <Filter>源文件\include\fs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\file\file.h">
+      <Filter>源文件\include\file</Filter>
+    </ClInclude>
+    <ClInclude Include="include\volume\volume.h">
+      <Filter>源文件\include\volume</Filter>
+    </ClInclude>
+    <ClInclude Include="include\volume\normal.h">
+      <Filter>源文件\include\volume</Filter>
+    </ClInclude>
+    <ClInclude Include="include\os-dep.h">
+      <Filter>源文件\include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fs\ntfs.h">
+      <Filter>源文件\include\fs</Filter>
+    </ClInclude>
+    <ClInclude Include="include\crypto\crc32.h">
+      <Filter>源文件\include\crypto</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

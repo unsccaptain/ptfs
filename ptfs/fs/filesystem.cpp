@@ -9,7 +9,7 @@ namespace ptfs {
 
 	namespace filesystem {
 
-		FileSystem* FsObjGenerator(device::PartitionDevice* Device, uint8_t Likely) {
+		FileSystem* FsObjGenerator(device::Device* Device, uint8_t Likely) {
 
 			return NULL;
 

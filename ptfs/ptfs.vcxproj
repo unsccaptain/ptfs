@@ -75,6 +75,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>G:\Develop\C_app\ptfs\ptfs\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_NONSTDC_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -111,7 +112,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="driver\win_nt.cpp" />
+    <ClCompile Include="crypto\crc32\crc32.cpp" />
+    <ClCompile Include="disk_device.cpp" />
+    <ClCompile Include="driver\os-win32.cpp" />
     <ClCompile Include="fs\fat.cpp" />
     <ClCompile Include="fs\filesystem.cpp" />
     <ClCompile Include="fs\null.cpp" />
@@ -120,22 +123,28 @@
     <ClCompile Include="label\gpt.cpp" />
     <ClCompile Include="label\msdos.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="partition_device.cpp" />
     <ClCompile Include="support.cpp" />
+    <ClCompile Include="volume\normal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\base.h" />
     <ClInclude Include="include\config.h" />
+    <ClInclude Include="include\crypto\crc32.h" />
     <ClInclude Include="include\device.h" />
     <ClInclude Include="include\disk_device.h" />
+    <ClInclude Include="include\file\file.h" />
     <ClInclude Include="include\fs\fat.h" />
     <ClInclude Include="include\fs\filesystem.h" />
+    <ClInclude Include="include\fs\ntfs.h" />
     <ClInclude Include="include\fs\null.h" />
-    <ClInclude Include="include\io_if.h" />
+    <ClInclude Include="include\os-dep.h" />
     <ClInclude Include="include\label\gpt.h" />
     <ClInclude Include="include\label\label.h" />
     <ClInclude Include="include\label\msdos.h" />
-    <ClInclude Include="include\partition.h" />
     <ClInclude Include="include\partition_device.h" />
+    <ClInclude Include="include\volume\normal.h" />
+    <ClInclude Include="include\volume\volume.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

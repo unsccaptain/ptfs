@@ -3,7 +3,8 @@
 #include <config.h>
 #include <base.h>
 #include <disk_device.h>
-#include <partition.h>
+#include <partition_device.h>
+#include <volume/volume.h>
 #include <fs/filesystem.h>
 #include <vector>
 
@@ -34,71 +35,76 @@ namespace ptfs{
 
 		private:
 
-			DosRawTable Mbr;
+			DosRawTable mbr;
 
-			std::vector<Partition> Partitions;
+			std::vector<device::PartitionDevice*> part_array;
 
 		public:
 
-			Msdos(device::Device* dev):Label("msdos",dev){
-			
-				DosRawTable Mbr;
-				if (Dev->ReadDeviceSector(0, (uint8_t*)&Mbr, 1) != 1)
-					return;
-			
-				memcpy(&this->Mbr, &Mbr, sizeof(Mbr));
-
-				for (uint8_t i = 0;i < 4;i++) {
-
-					if (Mbr.partitions[i].Type != 0) {
-
-						device::PartitionDevice* Device = new device::PartitionDevice(dev, 
-							Mbr.partitions[i].Start, 
-							Mbr.partitions[i].Length
-						);
-
-						filesystem::FileSystem* Fs = filesystem::FsObjGenerator(Device, Mbr.partitions[i].Type);
-
-						Partition CurPart(Mbr.partitions[i].Start, Mbr.partitions[i].Length, Fs, i + 1);
-						Partitions.push_back(CurPart);
-
-					}
-
-				}
-
-			}
-
-			static bool Probe(device::Device* Dev) {
+			//判断一个dev是不是mbr格式的
+			static bool Probe(device::Device* blk_dev) {
 
 				DosRawTable Mbr;
-				if (Dev->ReadDeviceSector(0, (uint8_t*)&Mbr, 1) != 1)
+				if (blk_dev->ReadDeviceSector(0, (uint8_t*)&Mbr, 1) != 1)
 					return false;
 
 				if (Mbr.partitions[0].Type == PARTITION_GPT)
 					return false;
 
-				if (Mbr.mbr_signature != MSDOS_MAGIC)
+				if (Mbr.magic != MSDOS_MAGIC)
+					return false;
+
+				if (Mbr.mbr_signature == 0)
 					return false;
 
 				return true;
 
 			}
 
-			const DosRawPartition* GetPartitionEntry(uint8_t Index);
+			//初始化一个msdos的label
+			Msdos(device::Device* dev):Label("msdos",dev){
 			
-			Partition* GetPartitionObj(uint8_t PartNumber);
+				if (!Probe(blk_dev)) {
+					part_array.clear();
+					return;
+				}
 
-			bool MakeLabel();
+				DosRawTable Mbr;
+				if (blk_dev->ReadDeviceSector(0, (uint8_t*)&Mbr, 1) != 1)
+					return;
+			
+				memcpy(&this->mbr, &Mbr, sizeof(Mbr));
 
-			bool MakePart(sec_off_t Size, sec_off_t Start, filesystem::FileSystem*Fs);
-
-			void Sync();
-
-			void ReleaseObject() {
-
-				Dev->DEC_REF();
+				for (uint8_t i = 0;i < 4;i++) {
+					if (Mbr.partitions[i].Type != 0) {
+						device::PartitionDevice* Device = new device::PartitionDevice(dev,
+							Mbr.partitions[i].Start,
+							Mbr.partitions[i].Length,
+							i + 1
+						);
+						part_array.push_back(Device);
+					}
+				}
 
 			}
+
+			//获得一个分区表项
+			const DosRawPartition* GetPartitionEntry(uint8_t Index);
+			
+			//获得一个分区对象
+			virtual device::PartitionDevice* GetPartitionDevice(uint8_t PartNumber) override;
+
+			//生成label
+			virtual bool MakeLabel() override;
+
+			//创建分区
+			virtual device::PartitionDevice* MakePart(sec_off_t Size, sec_off_t Start) override;
+
+			//设置分区类型
+			virtual void SetPartitionType(uint8_t PartNumber, uint16_t PartType) override;
+
+			//将label写入到blockio设备中
+			virtual bool Sync() override;
 
 		};
 

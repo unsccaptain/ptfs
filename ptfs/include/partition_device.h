@@ -1,11 +1,11 @@
 #pragma once
 
-#include "config.h"
-#include "base.h"
-#include "device.h"
-#include "disk_device.h"
-#include "io_if.h"
-#include "err.h"
+#include <config.h>
+#include <base.h>
+#include <device.h>
+#include <disk_device.h>
+#include <os-dep.h>
+#include <err.h>
 
 /*
 这里的PartitionDevice仅仅表示是设备中的一个区间
@@ -15,106 +15,119 @@
 
 namespace ptfs {
 
-	namespace device {
+	namespace label {
+
+		class Label;
+
+	}
+
+	namespace volume {
+
+		class Volume;
+
+	}
+
+	namespace filesystem {
+
+		class FileSystem;
+
+	}
+
+	namespace device {	
 
 		class PartitionDevice :public Device {
 
 		private:
 
-			char*			VolumePathName;
-			device_t		Handle = 0;
+			//分区所在的block device
+			Device*			blk_dev = NULL;
 
-			Device*			Dev;
-			sec_off_t		DevStartSec = 0;
-			sec_off_t		DevSizeSec = 0;
+			//分区起始地址
+			sec_off_t		dev_start_sec = 0;
+			
+			//分区结束地址
+			sec_off_t		dev_end_sec = 0;
+			
+			//分区号
+			uint16_t		part_number;
+			
+			//分区表项地址
+			void*			part_entry;
+
+			//由于分区表的特性，下面两项和文件系统相关的项无法合理的解耦
+			//如果有可能，还是应该避免下面两项的存在
+
+			//分区名称
+			char*			part_name;
+
+			//分区类型
+			uint16_t		part_type;
+
+			//在这个分区上的卷
+			volume::Volume* upper_vol;
 
 		public:
 
-			PartitionDevice(char* Vol) 
-				: Dev(NULL) {
-
-				Handle = OpenDevice(Vol);
-				if (Handle == reinterpret_cast<device_t>(-1)) {
-					Status = ERR_INVALID_DEV;
-					return;
-				}
-				else {
-					this->VolumePathName = _strdup(Vol);
-					Status = ERR_SUCCESS;
-				}
-
+			PartitionDevice() {
 			}
 
-			PartitionDevice(Device* Device, sec_off_t Start, sec_off_t Size) 
-				:Dev(Device), DevStartSec(Start), DevSizeSec(Size) {}
-
-			ssize_t ReadDeviceSector(sec_off_t Offset, uint8_t* Buffer, sec_off_t Size) {
-
-				if (Handle) {
-					return ReadDevice(Handle, Offset, Buffer, Size);
-				}
-				else
-				{
-
-					if (Offset + Size >= DevSizeSec)
-						return 0;
-
-					return Dev->ReadDeviceSector(DevStartSec + Offset, Buffer, Size);
-
-				}
-
+			PartitionDevice(Device* Device, sec_off_t Start, sec_off_t End)
+				:blk_dev(Device), dev_start_sec(Start), dev_end_sec(End), Device(Partition)
+			{
+				dev_size = dev_end_sec - dev_start_sec;
+				part_number = -1;
 			}
 
-			ssize_t WriteDeviceSector(sec_off_t Offset, uint8_t* Buffer, sec_off_t Size) {
-
-				if (Handle) {
-					return WriteDevice(Handle, Offset, Buffer, Size);
-				}
-				else
-				{
-
-					if (Offset + Size >= DevSizeSec)
-						return 0;
-
-					return Dev->WriteDeviceSector(DevStartSec + Offset, Buffer, Size);
-
-				}
-
+			PartitionDevice(Device* Device, sec_off_t Start, sec_off_t End, uint16_t PartNumber)
+				:blk_dev(Device), dev_start_sec(Start), dev_end_sec(End), Device(Partition),
+				part_number(PartNumber) 
+			{
+				dev_size = dev_end_sec - dev_start_sec;
 			}
 
-			sec_off_t GetSize() {
-
-				if (Size == 0) {
-
-					if (Handle)
-						Size = GetDeviceSize(Handle);
-					else
-						Size = DevSizeSec;
-
-				}
-				return Size;
-
+			PartitionDevice(Device* Device, sec_off_t Start, sec_off_t End, uint16_t PartNumber, void* Entry)
+				:blk_dev(Device), dev_start_sec(Start), dev_end_sec(End), Device(Partition),
+				part_number(PartNumber), part_entry(Entry) 
+			{
+				dev_size = dev_end_sec - dev_start_sec;
 			}
 
-			bool Lock() {
+			//扇区读分区设备
+			virtual ssize_t ReadDeviceSector(sec_off_t Offset, uint8_t* Buffer, sec_off_t Size) override;
 
-				return false;
+			//扇区写分区设备
+			virtual ssize_t WriteDeviceSector(sec_off_t Offset, uint8_t* Buffer, sec_off_t Size) override;
 
+			//获取设备大小
+			virtual sec_off_t GetDeviceSize() override;
+
+			//获取设备起始LBA
+			virtual sec_off_t GetDeviceStartLBA() override;
+
+			//获取最佳对齐大小
+			virtual sec_off_t GetOptimumAlign() override;
+
+			//获取默认对齐大小
+			virtual sec_off_t GetDefaultAlign() override;
+
+			//GET/SET属性
+
+			uint16_t GetPartitionNumber() {return part_number;}
+			void SetPartitionNumber(uint16_t pn) {part_number = pn;}
+
+			volume::Volume* GetPartitionUpperVolume() { return upper_vol; }
+			void SetPartitionUpperVolume(volume::Volume* vol) { upper_vol = vol; }
+
+			Device* GetParentDevice() {
+				return blk_dev;
 			}
-
-			bool Unlock() {
-
-				return false;
-
-			}
-
-			sec_off_t GetAlignInSector() {
-
-				return 8;
-
-			}
+			
+			//将分区提交至分区表
+			void SyncPartitionTable(label::Label* Label, uint16_t PartType);
 
 		};
+
+		int __cdecl PartitionComp(void const* a, void const* b);
 
 	}
 

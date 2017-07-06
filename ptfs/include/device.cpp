@@ -1,8 +1,8 @@
 
-#include "config.h"
-#include "base.h"
-#include "io_if.h"
-#include "device.h"
+#include <config.h>
+#include <base.h>
+#include <os-dep.h>
+#include <device.h>
 
 namespace ptfs {
 
